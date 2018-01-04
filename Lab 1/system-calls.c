@@ -44,7 +44,7 @@ void main()
 	if(size_read<0)
 		perror("error");
 	else
-		printf("%d\n%s\n",size_read,buf);
+		printf("String read: %d\n%s\n",size_read,buf);
 
 	// dup() system call
 	 int duplicated = dup(filedescriptor);
@@ -109,11 +109,6 @@ void main()
 	else
 		printf("Previous mask value: %d\n",old_mask );
 	*/
-
-	 // execl() process call
-	 /*int abc = execl(path1, path2,(char *)NULL);
-	 perror("error");
-	 printf("%d\n",abc );*/
 
 	 // unlink() system call
 	 int unlinked = unlink(path2);

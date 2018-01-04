@@ -3,7 +3,11 @@
 #include <stdlib.h>
 #include <signal.h>
 
-void sighandler(int);
+void sighandler(int signum) 
+{
+   printf("Caught signal %d, coming out...\n", signum);
+   exit(1);
+}
 
 int main () 
 {
@@ -15,9 +19,4 @@ int main ()
       sleep(1); 
    }
    return(0);
-}
-
-void sighandler(int signum) {
-   printf("Caught signal %d, coming out...\n", signum);
-   exit(1);
 }

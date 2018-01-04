@@ -16,6 +16,6 @@ int main()
         printf("-> Child process terminated\n");
     }
  
-    printf("-> Bye\n");
+    printf("-> End\n");
     return 0;
 }
