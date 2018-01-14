@@ -66,6 +66,6 @@ and ```recv()```, ```send()``` used for TCP?
  ***server*** : ```socket()```, ```bind()```, ```listen()```, ```accept()```, ```recv()```, ```send()```<br>
  ***client*** : ```socket()```, ```connect()```, ```send()```, ```recv()```
 
- And since UDP is a connectionless protocol, it does not require **connect()** on the client and **listen()** and **accept()** on the server.<br>
- ***server*** : ```socket()```, ```bind()```, ```recvfrom()```, ```sendto()```<br>
- ***client*** : ```socket()```, ```sendto()```, ```recvfrom()```
+ 	And since UDP is a connectionless protocol, it does not require **connect()** on the client and **listen()** and **accept()** on the server.<br>
+ 	***server*** : ```socket()```, ```bind()```, ```recvfrom()```, ```sendto()```<br>
+ 	***client*** : ```socket()```, ```sendto()```, ```recvfrom()```
