@@ -1,6 +1,5 @@
 /*
 	Round Robin Scheduling Algorithm
-	Non-Preemptive
 */
 #include "stdio.h"
 #include "stdlib.h"
