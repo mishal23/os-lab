@@ -1,198 +1,118 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "math.h"
-#include "stdbool.h"
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
 
+int need[100][100],allot[100][100],max[100][100],available[100];
+bool isFinished[100];
+int sequence[100];
+
+void isSafe(int N,int M)
+{
+        int i,j,work[100],count=0;
+        for(i=0;i<M;i++)
+            work[i]=available[i];
+        for(i=0;i<100;i++)
+            isFinished[i]=false;
+        while(count<N)
+        {
+                bool canAllot=false;
+                for(i=0;i<N;i++)
+                {
+                   if(isFinished[i]==false)
+                   {
+
+                        for(j=0;j<M;j++)
+                        {
+                            if(work[j]<need[i][j])
+                            {
+                                break;
+                            }
+                        }
+                        if(j==M)
+                        {
+                            for(j=0;j<M;j++)
+                            {
+                                work[j]+=allot[i][j];
+                            }
+
+                            sequence[count++]=i;
+                            isFinished[i]=true;
+                            canAllot=true;
+                        }
+                   }
+                }
+                if(canAllot==false)
+                {
+                    printf("System Is  not safe\n");
+                    return ;
+                }
+        }
+
+        printf("System is in safe state\n");
+
+        printf("Safe sequence :");
+        for(i=0;i<N;i++)
+            printf("%d ",sequence[i]);
+        printf("\n");
+}
 
 int main()
 {
-	int i,j;
-	int no_of_processes,no_of_resources;
-	printf("Enter number of processes: ");
-	scanf("%d",&no_of_processes);
-	printf("Enter number of resources: ");
-	scanf("%d",&no_of_resources);
+        int i,j,N,M;
+        printf("Enter the number of process and resources :");
+        scanf("%d %d",&N,&M);
 
-	int allocation[no_of_processes][no_of_resources],maximum[no_of_processes][no_of_resources];
-	int available[no_of_resources],need[no_of_processes][no_of_resources];
+        printf("Enter the available resources :\n");
 
+        for(i=0;i<M;i++)
+            scanf("%d",&available[i]);
 
-	printf("Enter allocation matrix\n");
-	for(i=0;i<no_of_processes;i++)
-	{
-		for(j=0;j<no_of_resources;j++)
-		{
-			scanf("%d",&allocation[i][j]);
-		}
-	}
-	printf("Enter maximum matrix\n");
-	for(i=0;i<no_of_processes;i++)
-	{
-		for(j=0;j<no_of_resources;j++)
-		{
-			scanf("%d",&maximum[i][j]);
-		}
-	}
-	printf("Enter number of available resources: ");
-	int work[no_of_resources];
-	bool finish[no_of_processes];
-	for(i=0;i<no_of_resources;i++)
-	{
-		scanf("%d",&available[i]);
-		work[i]=available[i];
-	}
-	for(i=0;i<no_of_processes;i++)
-	{
-		for(j=0;j<no_of_resources;j++)
-		{
-			need[i][j]=maximum[i][j]-allocation[i][j];
-		}
-	}
-	
-	// Safety Algorithm
-	for(i=0;i<no_of_processes;i++)
-	{
-		finish[i]=false;
-	}
-	int processes[no_of_processes],k=0;
-	while(1)
-	{
-		bool flag = false;
-		
-		for(i=0;i<no_of_processes;i++)
-		{
-			bool enter = true;
-			if(finish[i]==false)
-			{
-				for(j=0;j<no_of_resources;j++)
-				{
-					if(need[i][j]>work[j])
-						enter = false;
-				}
-				if(enter == true)
-				{
-					flag = true;
-					processes[k]=i;
-					k++;
-					break;
-				}
-			}
-		}
-		if(flag==true)
-		{
-			for(j=0;j<no_of_resources;j++)
-			{
-				work[j]+=allocation[i][j];
-			}
-			finish[i]=true;
-		}
-		else
-			break;
-	}
-	int processes_finished=0;
-	for(i=0;i<no_of_processes;i++)
-	{
-		if(finish[i]==true)
-		{
-			processes_finished++;
-		}
-	}
-	if(processes_finished==no_of_processes)
-	{
-		printf("Safe sequence: ");
-		for(i=0;i<no_of_processes;i++)
-		{
-			printf("%d ", processes[i]);
-		}
-	}
-	else
-	{
-		printf("Unsafe\n");
-	}
-	printf("\n");
-	
-	// Resource Request Algorithm
-	int request_process_number;
-	printf("Enter process number of process requesting: ");
-	scanf("%d",&request_process_number);
-	int request[no_of_resources];
-	printf("Enter requesting resources: ");
-	for(i=0;i<no_of_resources;i++)
-	{
-		scanf("%d",&request[i]);
-	}
-	for(i=0;i<no_of_resources;i++)
-	{
-		if(request[i]>need[request_process_number][i] || request[i]>available[i])
-		{
-			printf("Enough resources not available\n");
-			return 0;
-		}
-	}
-	for(i=0;i<no_of_resources;i++)
-	{
-		available[i]-=request[i];
-		allocation[request_process_number][i]+=request[i];
-		need[request_process_number][i]-=request[i];
-	}
+        printf("Enter the Allocation Matrix :\n");
 
-	// RE- Safety Algorithm
-	for(i=0;i<no_of_processes;i++)
-	{
-		finish[i]=false;
-	}
-	while(1)
-	{
-		bool flag = false;
-		
-		for(i=0;i<no_of_processes;i++)
-		{
-			bool enter = true;
-			if(finish[i]==false)
-			{
-				for(j=0;j<no_of_resources;j++)
-				{
-					if(need[i][j]>work[j])
-						enter = false;
-				}
-				if(enter == true)
-				{
-					flag = true;
-					processes[k]=i;
-					k++;
-					break;
-				}
-			}
-		}
-		if(flag==true)
-		{
-			for(j=0;j<no_of_resources;j++)
-			{
-				work[j]+=allocation[i][j];
-			}
-			finish[i]=true;
-		}
-		else
-			break;
-	}
-	processes_finished=0;
-	for(i=0;i<no_of_processes;i++)
-	{
-		if(finish[i]==true)
-		{
-			processes_finished++;
-		}
-	}
-	if(processes_finished==no_of_processes)
-	{
-		printf("Safe sequence: ");
-		for(i=0;i<no_of_processes;i++)
-		{
-			printf("%d ", processes[i]);
-		}
-	}
-	else
-	{
-		printf("Unsafe\n");
-	}
+        for(i=0;i<N;i++)
+            for(j=0;j<M;j++)
+                scanf("%d",&allot[i][j]);
+
+        printf("Enter the matrix for maximum demand of each process :\n");
+
+        for(i=0;i<N;i++)
+            for(j=0;j<M;j++)
+                scanf("%d",&max[i][j]);
+
+        //calculation of need matrix
+        for(i=0;i<N;i++)
+            for(j=0;j<M;j++)
+                need[i][j]=max[i][j]-allot[i][j];
+
+        isSafe(N,M);
+
+        int indx,arr[100];
+        printf("Enter the process no for resource request :");
+        scanf("%d",&indx);
+
+        printf("Enter the requested instances of Each :");
+        for(i=0;i<M;i++)
+            scanf("%d",&arr[i]);
+
+        for(i=0;i<M;i++)
+        {
+            if( need[indx][i]<arr[i] || arr[i]>available[i] )
+            {
+                printf("Cannot request\n");
+                break;
+            }
+        }
+
+        if(i==M)
+        {
+            for(i=0;i<M;i++)
+            {
+                allot[indx][i]+=arr[i];
+                available[i]-=arr[i];
+                need[indx][i]-=arr[i];
+            }
+
+            isSafe(N,M);
+        }
+
 }

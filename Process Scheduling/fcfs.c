@@ -26,7 +26,6 @@ int main()
 		printf("Enter burst time for process%d: ",i+1);
 		scanf("%d",&proc[i].burst_time);
 		proc[i].process_id = i+1;
-
 	}
 	int service_time[n];
 	service_time[0]=0;

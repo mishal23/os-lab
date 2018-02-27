@@ -12,11 +12,13 @@ pthread_t producerThread[50], consumerThread[50];
 int buffer[BUFFER_SIZE];
 int counter;
 
-pthread_mutex_t mutex;
+//pthread_mutex_t mutex;
+sem_t mutex;
 
 void init()
 {
-	pthread_mutex_init(&mutex,NULL);
+	sem_init(&mutex,0,1);
+	//pthread_mutex_init(&mutex,NULL);
 	sem_init(&fill,1,0);
 	sem_init(&empty,1,BUFFER_SIZE);
 	counter=0;
@@ -44,12 +46,13 @@ void *producer(void *param)
 	printf("%d\n",val );
 	printf("emptya=%d\n", sem_getvalue(&empty,&val));
 	printf("%d\n",val );*/
-	pthread_mutex_lock(&mutex);
-
+	//pthread_mutex_lock(&mutex);
+	sem_wait(&mutex);
 	printf("Produced item: %d\n", item);
 	produce(item);
 
-	pthread_mutex_unlock(&mutex);
+	//pthread_mutex_unlock(&mutex);
+	sem_post(&mutex);
 	sem_post(&fill);
 }
 
@@ -57,13 +60,14 @@ void *consumer(void *param)
 {
 	int item;
 	sem_wait(&fill);
-	pthread_mutex_lock(&mutex);
-
+	//pthread_mutex_lock(&mutex);
+	sem_wait(&mutex);
 	item =consume();
 	printf("Consumed item: %d\n",item );
 
-	pthread_mutex_unlock(&mutex);
-	sem_post(&fill);
+	sem_post(&mutex);
+	//pthread_mutex_unlock(&mutex);
+	sem_post(&fill);	
 }
 
 int main()

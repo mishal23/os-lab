@@ -4,7 +4,7 @@
 #include "netinet/in.h"
 #include "stdlib.h"
 #include "syslog.h"
-#include "errno.h'
+#include "errno.h"
 #include "unistd.h"
 
 #define SERVER "0.0.0.0"

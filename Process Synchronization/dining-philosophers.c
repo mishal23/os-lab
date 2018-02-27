@@ -44,8 +44,8 @@ int main()
 	{
 		pthread_join(philosophers[i],NULL);
 	}
-	for(i=0;i<n;i++)
+	/*for(i=0;i<n;i++)
 	{
 		pthread_mutex_destroy(&chopsticks[i]);
-	}
+	}*/
 }

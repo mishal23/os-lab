@@ -62,7 +62,6 @@ int main ()
 		fgets(buffer, BUFLEN, stdin);
 
 		sendto(socket_filedescriptor, buffer, BUFLEN, 0, (struct sockaddr *)clientAddr, socketServerLength);
-
 	}
 
 }
