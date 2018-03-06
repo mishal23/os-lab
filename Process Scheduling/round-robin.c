@@ -44,6 +44,7 @@ int main()
 	for(int i=0; i<n; i++)
 	{
 		printf("Enter the arrival time for the process%d: ",i+1);
+		printf("Enter the arrival time for the process%d: ",i+1);
 		scanf("%d", &proc[i].arrival_time);
 		printf("Enter the burst time for the process%d: ",i+1);
 		scanf("%d", &proc[i].burst_time);
