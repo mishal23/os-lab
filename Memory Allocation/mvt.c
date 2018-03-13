@@ -1,5 +1,8 @@
 /*
-	Multiprogramming with a Variable number of Tasks
+	Deallocation
+	Multiprogramming with Variable Number of Tasks
+
+	Note: This code isn't correct for all test cases
 */
 #include "stdio.h"
 #include "stdlib.h"
@@ -8,6 +11,8 @@ struct process
 {
 	int id;
 	int memory_required;
+	int external_fragment;
+	int internal_fragment;
 	bool removed;
 };
 int main()
@@ -29,21 +34,45 @@ int main()
 			case 1:
 				printf("Enter memory size for process%d: ",i+1);
 				scanf("%d",&memory_required);
+				int new_internal_space = 0;
+					for(int j=0;j<i;j++)
+					{
+						if(proc[j].removed == true )
+						{
+							new_internal_space+=proc[j].internal_fragment;
+						}
+					}
 
-				if(free_memory<memory_required)
+				if(free_memory < memory_required)
 				{
+					printf("Free Memory: %d\n",free_memory );
 					printf("Not enough memory for the process\n");
 				}
-				else
-				{
-					proc[i].id = i;
-					proc[i].memory_required = memory_required;
-					proc[i].removed = false;
-					free_memory-=memory_required;
-					printf("Process allocated\n");
-					i++;
-				}
+				else if(new_internal_space > memory_required)
+					{
+						printf("Process allocated\n" );
+						printf("Free memory: %d\n",free_memory + new_internal_space - memory_required );
+					}
+					else if(free_memory - new_internal_space >= memory_required)
+					{
+						proc[i].id = i;
+						proc[i].memory_required = memory_required;
+						proc[i].removed = false;
+						free_memory-=memory_required;
+						proc[i].internal_fragment = 0;
+						proc[i].external_fragment = free_memory;
+						printf("Process allocated\n");
+						printf("Free memory: %d\n",free_memory );
+						i++;
+					}
+					else
+					{
+						printf("Process not allocated\n");
+						printf("%d %d\n",free_memory, new_internal_space );
+					}
+
 			break;
+			
 			case 2:
 				printf("Enter the id of process leaving: ");
 				scanf("%d",&process_id);
@@ -54,8 +83,11 @@ int main()
 				else
 				{
 					int memory_to_remove = proc[process_id].memory_required;
+					proc[process_id].internal_fragment = memory_to_remove;
 					free_memory+=memory_to_remove;
+					proc[process_id].external_fragment = free_memory;
 					proc[process_id].removed = true;
+					printf("Free Memory: %d\n",free_memory );
 				}
 			break;
 			case 3:
