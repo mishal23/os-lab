@@ -100,7 +100,7 @@ int main()
 	scanf("%d",&number_of_references);
 	int reference[number_of_references];
 	
-	for(i=0;i<number_of_pages;i++)
+	for(i=0;i<number_of_references;i++)
 	{
 		scanf("%d",&reference[i]);
 		add_reference(frame_size,frame,reference[i],i,number_of_references,reference);
