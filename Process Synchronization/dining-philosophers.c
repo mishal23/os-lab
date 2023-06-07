@@ -18,10 +18,15 @@ void *thinkEatRepeat(int i)
 
 	printf("%d eating...\n",i+1 );
 	sleep(1);
-
-	pthread_mutex_unlock(&chopsticks[i]);
-	pthread_mutex_unlock(&chopsticks[(i+1)%n]);		
-
+	
+	if(i!=n){	
+		pthread_mutex_unlock(&chopsticks[i]);
+		pthread_mutex_unlock(&chopsticks[(i+1)%n]);		
+	}
+	else{	//It handles the case when all philosphers pick the chopstick to their right which will result in a deadlock
+		pthread_mutex_unlock(&chopsticks[i]);
+		pthread_mutex_unlock(&chopsticks[(i-1)%n]);		
+	}
 	printf("\t%d Finished eating\n", i+1);
 
 	return NULL;
